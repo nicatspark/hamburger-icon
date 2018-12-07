@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+<style>
+	body {
+			  /* display: block; */
+	
+	  background-color: #ff5252;
+		color: #fff;
+	  font-family: "Muli", sans-serif;
+	  font-size: 0.7em;
+	  margin: 0;
+	  padding: 0;
+	}
+	.container {
+	  align-items: center;
+	/*   background-color: rgba(0,0,0,0.1); */
+	  display: flex;
+	  flex-direction: column;
+	  justify-content: space-between;
+	  left: 50%;
+	  position: absolute;
+	  top: 50%;
+	  transform: translate(-50%,-50%);
+	}
+	/*-------------------------------------------- separe */
+	.separe {
+	  background-color: #fff;
+	  border-radius: 2px;
+	  height: 2px;
+	  width: 100%;
+	}
+	/*-------------------------------------------- text */
+	.text-wrapper {
+	  display: flex;
+	  justify-content: center;
+	  margin-top: 50px;
+	  width: 100%;
+	}
+	.button {
+	  background-color: #ff5252;
+	  border-radius: 45px;
+	  cursor: pointer;
+	  margin: 0 10px;
+	  padding: 5px 15px;
+	}
+	.button:hover {
+	  background-color: #a53636;
+	}
+	.button-active {
+	  background-color: #a53636;
+	}
+	/*-------------------------------------------- icon */
+	.icon-box {
+	/*   background-color: rgba(0,0,0,0.1); */
+	  height: 60px;
+	  margin-bottom: 80px;
+	  position: relative;
+	  transform: rotate(0deg);
+	  transition-duration: 0.4s;
+	  transform-origin: center;
+	  transition-timing-function: cubic-bezier(.69,-0.49,.39,.97);
+	  width: 80px;
+	}
+	.line {
+	  background-color: #fff;
+	  border-radius: 2px;
+	  height: 2px;
+	  left: 0;
+	  opacity: 1;
+	  position: absolute;
+	  transition-duration: 0.4s;
+	  transition-timing-function: cubic-bezier(.69,-0.49,.39,.97);
+	  width: 80px;
+	}
+	#line01 {
+	  top: 0;
+	}
+	#line02, #line03 {
+	  top: calc(50% - 1px);
+	}
+	#line04 {
+	  bottom: 0;
+	}
+	/*-------------------------------------------- animation */
+	/*------------------------------- left */
+	#line01.line01-left {
+	  left: -3px;
+	  top: calc(50% - 8px);
+	  transform: rotate(-45deg);
+	  width: 20px;
+	}
+	#line04.line04-left {
+	  left: -3px;
+	  bottom: calc(50% - 8px);
+	  transform: rotate(45deg);
+	  width: 20px;
+	}
+	/*------------------------------- right */
+	#line01.line01-right {
+	  left: 62px;
+	  top: calc(50% - 8px);
+	  transform: rotate(45deg);
+	  width: 20px;
+	}
+	#line04.line04-right {
+	  left: 62px;
+	  bottom: calc(50% - 8px);
+	  transform: rotate(-45deg);
+	  width: 20px;
+	}
+	/*------------------------------- close */
+	#line01.line01-close {
+	  left: 0;
+	  top: calc(50% - 1px);
+	  opacity: 0;
+	}
+	#line04.line04-close {
+	  bottom: calc(50% - 1px);
+	  left: 0;
+	  opacity: 0;
+	}
+	#line02.line02-close {
+	  transform: rotate(45deg); 
+	}
+	#line03.line03-close {
+	  transform: rotate(-45deg);
+	}
+	/*------------------------------- add */
+	.icon-box-add {
+	  transform: rotate(45deg) scale(0.7);
+	}
+</style>
+<script>
+function init() {
+    function $(selector) {
+      return document.querySelector(selector);
+    }
+
+    Object.prototype.addClass = function(classname) {
+      this.classList.add(classname);
+    }
+    Object.prototype.removeClass = function(classname) {
+      this.classList.remove(classname);
+    }
+
+    var iconBox =   $('.icon-box');
+    var line01  =   $('#line01');
+    var line02  =   $('#line02');
+    var line03  =   $('#line03');
+    var line04  =   $('#line04');
+    
+    var buttonLeft  =   $('#left');
+    var buttonRight =   $('#right');
+    var buttonMenu  =   $('#menu');
+    var buttonClose =   $('#close');
+    var buttonAdd   =   $('#add');
+
+		buttonLeft.addEventListener('click', function(){
+      buttonLeft.   addClass      ('button-active');
+      line01.       addClass      ('line01-left');
+      line04.       addClass      ('line04-left');
+      
+      buttonRight.  removeClass   ('button-active');
+      buttonMenu.   removeClass   ('button-active');
+      buttonClose.  removeClass   ('button-active');
+      buttonAdd.    removeClass   ('button-active');
+      line01.       removeClass   ('line01-right');
+      line04.       removeClass   ('line04-right');
+      line01.       removeClass   ('line01-close');
+      line02.       removeClass   ('line02-close');
+      line03.       removeClass   ('line03-close');
+      line04.       removeClass   ('line04-close');
+      iconBox.      removeClass   ('icon-box-add');
+    });
+    buttonRight.addEventListener('click', function(){
+      buttonRight.  addClass      ('button-active');
+      line01.       addClass      ('line01-right');
+      line04.       addClass      ('line04-right');
+      
+      buttonLeft.   removeClass   ('button-active');
+      buttonMenu.   removeClass   ('button-active');
+      buttonClose.  removeClass   ('button-active');
+      buttonAdd.    removeClass   ('button-active');
+      line01.       removeClass   ('line01-left');
+      line04.       removeClass   ('line04-left');
+      line01.       removeClass   ('line01-close');
+      line02.       removeClass   ('line02-close');
+      line03.       removeClass   ('line03-close');
+      line04.       removeClass   ('line04-close');
+      iconBox.      removeClass   ('icon-box-add');
+    });
+    buttonMenu.addEventListener('click', function(){
+      buttonMenu.  addClass      ('button-active');
+      
+      buttonLeft.   removeClass   ('button-active');
+      buttonRight.  removeClass   ('button-active');
+      buttonClose.  removeClass   ('button-active');
+      buttonAdd.    removeClass   ('button-active');
+      line01.       removeClass   ('line01-left');
+      line04.       removeClass   ('line04-left');
+      line01.       removeClass   ('line01-right');
+      line04.       removeClass   ('line04-right');
+      line01.       removeClass   ('line01-close');
+      line02.       removeClass   ('line02-close');
+      line03.       removeClass   ('line03-close');
+      line04.       removeClass   ('line04-close');
+      line01.       removeClass   ('line01-add');
+      line04.       removeClass   ('line04-add');
+      iconBox.      removeClass   ('icon-box-add');
+    });
+    buttonClose.addEventListener('click', function(){
+      buttonClose.  addClass      ('button-active');
+      line01.       addClass      ('line01-close');
+      line02.       addClass      ('line02-close');
+      line03.       addClass      ('line03-close');
+      line04.       addClass      ('line04-close');
+      
+      buttonLeft.   removeClass   ('button-active');
+      buttonRight.  removeClass   ('button-active');
+      buttonMenu.   removeClass   ('button-active');
+      buttonAdd.    removeClass   ('button-active');
+      line01.       removeClass   ('line01-left');
+      line04.       removeClass   ('line04-left');
+      line01.       removeClass   ('line01-right');
+      line04.       removeClass   ('line02-right');
+      iconBox.      removeClass   ('icon-box-add');
+    });
+    buttonAdd.addEventListener('click', function(){
+      buttonAdd.    addClass      ('button-active');
+      line01.       addClass      ('line01-close');
+      line02.       addClass      ('line02-close');
+      line03.       addClass      ('line03-close');
+      line04.       addClass      ('line04-close');
+      iconBox.      addClass      ('icon-box-add');
+      
+      buttonLeft.   removeClass   ('button-active');
+      buttonRight.  removeClass   ('button-active');
+      buttonMenu.   removeClass   ('button-active');
+      buttonAdd.    removeClass   ('button-active');
+      line01.       removeClass   ('line01-left');
+      line04.       removeClass   ('line04-left');
+      line01.       removeClass   ('line01-right');
+      line04.       removeClass   ('line02-right');
+    });
+  }
+
+window.onload = init ;
+</script>
+</head>
+<body>
+	<div class="container">
+		<div class="icon-box">
+			<div id="line01" class="line"></div>
+			<div id="line02" class="line"></div>
+			<div id="line03" class="line"></div>
+			<div id="line04" class="line"></div>
+		</div>
+		<div class="separe"></div>
+		<div class="text-wrapper">
+			<p id="left"  class="button">left</p>
+			<p id="right" class="button">right</p>
+			<p id="menu"  class="button">menu</p>
+			<p id="close" class="button">close</p>
+			<p id="add"   class="button">add</p>
+		</div>
+	</div>
+</body>
+</html>
