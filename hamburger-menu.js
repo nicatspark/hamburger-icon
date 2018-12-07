@@ -167,7 +167,39 @@ class HamburgerMenu extends PolymerElement {
         type: String,
         value: 'hamburger-menu',
       },
+      shape: {
+        type: String,
+        value: 'hamburger-icon',
+        reflectToAttribute: true,
+        observe: "_handleChange",
+      }
     };
+  }
+
+  _handleChange() {
+    switch(this.shape){
+      case 'hamburger-icon':
+        this.buttonClose_fn();
+      case 'arrow-left':
+        this.buttonLeft_fn();
+      case 'arrow-right':
+        this.buttonRight_fn();
+      case 'close':
+        this.buttonMenu_fn();
+      case 'add':
+        this.buttonAdd_fn();
+      default:
+        this.buttonClose_fn();
+    }
+  }
+
+  constructor() {
+    super();
+    this.buttonLeft_fn = this.buttonLeft_fn.bind(this);
+    this.buttonRight_fn = this.buttonRight_fn.bind(this);
+    this.buttonMenu_fn = this.buttonMenu_fn.bind(this);
+    this.buttonClose_fn = this.buttonClose_fn.bind(this);
+    this.buttonAdd_fn = this.buttonAdd_fn.bind(this);
   }
 
   connectedCallback() {
@@ -177,11 +209,6 @@ class HamburgerMenu extends PolymerElement {
   }
 
   init() {
-    const host = this;
-    function $(selector) {
-      return host.shadowRoot.querySelector(selector);
-    }
-
     Object.prototype.addClass = function(classname) {
       this.classList.add(classname);
     }
@@ -189,107 +216,147 @@ class HamburgerMenu extends PolymerElement {
       this.classList.remove(classname);
     }
 
-    var iconBox =   $('.icon-box');
-    var line01  =   $('#line01');
-    var line02  =   $('#line02');
-    var line03  =   $('#line03');
-    var line04  =   $('#line04');
-    
-    var buttonLeft  =   $('#left');
-    var buttonRight =   $('#right');
-    var buttonMenu  =   $('#menu');
-    var buttonClose =   $('#close');
-    var buttonAdd   =   $('#add');
-   
-    buttonLeft.addEventListener('click', function(){
-      buttonLeft.   addClass      ('button-active');
-      line01.       addClass      ('line01-left');
-      line04.       addClass      ('line04-left');
-      
-      buttonRight.  removeClass   ('button-active');
-      buttonMenu.   removeClass   ('button-active');
-      buttonClose.  removeClass   ('button-active');
-      buttonAdd.    removeClass   ('button-active');
-      line01.       removeClass   ('line01-right');
-      line04.       removeClass   ('line04-right');
-      line01.       removeClass   ('line01-close');
-      line02.       removeClass   ('line02-close');
-      line03.       removeClass   ('line03-close');
-      line04.       removeClass   ('line04-close');
-      iconBox.      removeClass   ('icon-box-add');
-    });
-    buttonRight.addEventListener('click', function(){
-      buttonRight.  addClass      ('button-active');
-      line01.       addClass      ('line01-right');
-      line04.       addClass      ('line04-right');
-      
-      buttonLeft.   removeClass   ('button-active');
-      buttonMenu.   removeClass   ('button-active');
-      buttonClose.  removeClass   ('button-active');
-      buttonAdd.    removeClass   ('button-active');
-      line01.       removeClass   ('line01-left');
-      line04.       removeClass   ('line04-left');
-      line01.       removeClass   ('line01-close');
-      line02.       removeClass   ('line02-close');
-      line03.       removeClass   ('line03-close');
-      line04.       removeClass   ('line04-close');
-      iconBox.      removeClass   ('icon-box-add');
-    });
-    buttonMenu.addEventListener('click', function(){
-      buttonMenu.  addClass      ('button-active');
-      
-      buttonLeft.   removeClass   ('button-active');
-      buttonRight.  removeClass   ('button-active');
-      buttonClose.  removeClass   ('button-active');
-      buttonAdd.    removeClass   ('button-active');
-      line01.       removeClass   ('line01-left');
-      line04.       removeClass   ('line04-left');
-      line01.       removeClass   ('line01-right');
-      line04.       removeClass   ('line04-right');
-      line01.       removeClass   ('line01-close');
-      line02.       removeClass   ('line02-close');
-      line03.       removeClass   ('line03-close');
-      line04.       removeClass   ('line04-close');
-      line01.       removeClass   ('line01-add');
-      line04.       removeClass   ('line04-add');
-      iconBox.      removeClass   ('icon-box-add');
-    });
-    buttonClose.addEventListener('click', function(){
-      buttonClose.  addClass      ('button-active');
-      line01.       addClass      ('line01-close');
-      line02.       addClass      ('line02-close');
-      line03.       addClass      ('line03-close');
-      line04.       addClass      ('line04-close');
-      
-      buttonLeft.   removeClass   ('button-active');
-      buttonRight.  removeClass   ('button-active');
-      buttonMenu.   removeClass   ('button-active');
-      buttonAdd.    removeClass   ('button-active');
-      line01.       removeClass   ('line01-left');
-      line04.       removeClass   ('line04-left');
-      line01.       removeClass   ('line01-right');
-      line04.       removeClass   ('line02-right');
-      iconBox.      removeClass   ('icon-box-add');
-    });
-    buttonAdd.addEventListener('click', function(){
-      buttonAdd.    addClass      ('button-active');
-      line01.       addClass      ('line01-close');
-      line02.       addClass      ('line02-close');
-      line03.       addClass      ('line03-close');
-      line04.       addClass      ('line04-close');
-      iconBox.      addClass      ('icon-box-add');
-      
-      buttonLeft.   removeClass   ('button-active');
-      buttonRight.  removeClass   ('button-active');
-      buttonMenu.   removeClass   ('button-active');
-      buttonAdd.    removeClass   ('button-active');
-      line01.       removeClass   ('line01-left');
-      line04.       removeClass   ('line04-left');
-      line01.       removeClass   ('line01-right');
-      line04.       removeClass   ('line02-right');
-    });
+    const {
+      buttonLeft,
+      buttonRight,
+      buttonMenu,
+      buttonClose,
+      buttonAdd,
+    } = this.viewModel();
+
+    buttonLeft.addEventListener('click', this.buttonLeft_fn);
+    buttonRight.addEventListener('click', this.buttonRight_fn);
+    buttonMenu.addEventListener('click', this.buttonMenu_fn);
+    buttonClose.addEventListener('click', this.buttonClose_fn);
+    buttonAdd.addEventListener('click', this.buttonAdd_fn);
   }
 
+  viewModel() {
+    const host = this;
+    const iconBox =   $('.icon-box');
+    const line01  =   $('#line01');
+    const line02  =   $('#line02');
+    const line03  =   $('#line03');
+    const line04  =   $('#line04');
+    
+    const buttonLeft  =   $('#left');
+    const buttonRight =   $('#right');
+    const buttonMenu  =   $('#menu');
+    const buttonClose =   $('#close');
+    const buttonAdd   =   $('#add');
+    return {
+      iconBox,
+      line01,
+      line02,
+      line03,
+      line04,
+      buttonLeft,
+      buttonRight,
+      buttonMenu,
+      buttonClose,
+      buttonAdd,
+    }
+    function $(selector) {
+      return host.shadowRoot.querySelector(selector);
+    }
+  }
+
+  buttonLeft_fn() {
+    const _ = this.viewModel();
+    _.buttonLeft.   addClass      ('button-active');
+    _.line01.       addClass      ('line01-left');
+    _.line04.       addClass      ('line04-left');
+    
+    _.buttonRight.  removeClass   ('button-active');
+    _.buttonMenu.   removeClass   ('button-active');
+    _.buttonClose.  removeClass   ('button-active');
+    _.buttonAdd.    removeClass   ('button-active');
+    _.line01.       removeClass   ('line01-right');
+    _.line04.       removeClass   ('line04-right');
+    _.line01.       removeClass   ('line01-close');
+    _.line02.       removeClass   ('line02-close');
+    _.line03.       removeClass   ('line03-close');
+    _.line04.       removeClass   ('line04-close');
+    _.iconBox.      removeClass   ('icon-box-add');
+  }
+
+  buttonRight_fn() {
+    const _ = this.viewModel();
+    _.buttonRight.  addClass      ('button-active');
+    _.line01.       addClass      ('line01-right');
+    _.line04.       addClass      ('line04-right');
+    
+    _.buttonLeft.   removeClass   ('button-active');
+    _.buttonMenu.   removeClass   ('button-active');
+    _.buttonClose.  removeClass   ('button-active');
+    _.buttonAdd.    removeClass   ('button-active');
+    _.line01.       removeClass   ('line01-left');
+    _.line04.       removeClass   ('line04-left');
+    _.line01.       removeClass   ('line01-close');
+    _.line02.       removeClass   ('line02-close');
+    _.line03.       removeClass   ('line03-close');
+    _.line04.       removeClass   ('line04-close');
+    _.iconBox.      removeClass   ('icon-box-add');
+  }
+
+  buttonMenu_fn() {
+    const _ = this.viewModel();
+    _.buttonMenu.  addClass      ('button-active');
+
+    _.buttonLeft.   removeClass   ('button-active');
+    _.buttonRight.  removeClass   ('button-active');
+    _.buttonClose.  removeClass   ('button-active');
+    _.buttonAdd.    removeClass   ('button-active');
+    _.line01.       removeClass   ('line01-left');
+    _.line04.       removeClass   ('line04-left');
+    _.line01.       removeClass   ('line01-right');
+    _.line04.       removeClass   ('line04-right');
+    _.line01.       removeClass   ('line01-close');
+    _.line02.       removeClass   ('line02-close');
+    _.line03.       removeClass   ('line03-close');
+    _.line04.       removeClass   ('line04-close');
+    _.line01.       removeClass   ('line01-add');
+    _.line04.       removeClass   ('line04-add');
+    _.iconBox.      removeClass   ('icon-box-add');
+  }
+
+  buttonClose_fn() {
+    const _ = this.viewModel();
+    _.buttonClose.  addClass      ('button-active');
+    _.line01.       addClass      ('line01-close');
+    _.line02.       addClass      ('line02-close');
+    _.line03.       addClass      ('line03-close');
+    _.line04.       addClass      ('line04-close');
+
+    _.buttonLeft.   removeClass   ('button-active');
+    _.buttonRight.  removeClass   ('button-active');
+    _.buttonMenu.   removeClass   ('button-active');
+    _.buttonAdd.    removeClass   ('button-active');
+    _.line01.       removeClass   ('line01-left');
+    _.line04.       removeClass   ('line04-left');
+    _.line01.       removeClass   ('line01-right');
+    _.line04.       removeClass   ('line02-right');
+    _.iconBox.      removeClass   ('icon-box-add');
+  }
+
+  buttonAdd_fn(){
+    const _ = this.viewModel();
+    _.buttonAdd.    addClass      ('button-active');
+    _.line01.       addClass      ('line01-close');
+    _.line02.       addClass      ('line02-close');
+    _.line03.       addClass      ('line03-close');
+    _.line04.       addClass      ('line04-close');
+    _.iconBox.      addClass      ('icon-box-add');
+
+    _.buttonLeft.   removeClass   ('button-active');
+    _.buttonRight.  removeClass   ('button-active');
+    _.buttonMenu.   removeClass   ('button-active');
+    _.buttonAdd.    removeClass   ('button-active');
+    _.line01.       removeClass   ('line01-left');
+    _.line04.       removeClass   ('line04-left');
+    _.line01.       removeClass   ('line01-right');
+    _.line04.       removeClass   ('line02-right');
+  }
 }
 
 window.customElements.define('hamburger-menu', HamburgerMenu);
