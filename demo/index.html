@@ -15,18 +15,149 @@
 
     <script type="module" src="../hamburger-menu.js"></script>
 
+    <script>
+function init() {
+  const {
+    hamburgerMenu,
+    activeButton,
+    buttonLeft,
+    buttonRight,
+    buttonMenu,
+    buttonClose,
+    buttonAdd,
+    deactivate,
+  } = viewModel();
+  buttonLeft.addEventListener('click', () => {
+    hamburgerMenu.setAttribute('shape','arrow-left');
+    deactivate();
+    buttonLeft.classList.add('button-active');
+  });
+  buttonRight.addEventListener('click', () => {
+    hamburgerMenu.setAttribute('shape','arrow-right');
+    deactivate();
+    buttonRight.classList.add('button-active');
+  });
+  buttonMenu.addEventListener('click', () => {
+    hamburgerMenu.setAttribute('shape','hamburger-menu');
+    deactivate();
+    buttonMenu.classList.add('button-active');
+  });
+  buttonClose.addEventListener('click', () => {
+    hamburgerMenu.setAttribute('shape','close');
+    deactivate();
+    buttonClose.classList.add('button-active');
+  });
+  buttonAdd.addEventListener('click', () => {
+    hamburgerMenu.setAttribute('shape','add');
+    deactivate();
+    buttonAdd.classList.add('button-active');
+  });
+}
+window.onload = init;
+
+function viewModel() {
+  const hamburgerMenu =   $('hamburger-menu');
+  const activeButton  =   $('.button-active');
+  const buttonLeft    =   $('#left');
+  const buttonRight   =   $('#right');
+  const buttonMenu    =   $('#menu');
+  const buttonClose   =   $('#close');
+  const buttonAdd     =   $('#add');
+  const deactivate = () => [].forEach.call(document.querySelectorAll('.button-active'), item => item.classList.remove('button-active'));
+  return {
+    hamburgerMenu,
+    activeButton,
+    buttonLeft,
+    buttonRight,
+    buttonMenu,
+    buttonClose,
+    buttonAdd,
+    deactivate,
+  }
+  function $(selector) {
+    return document.querySelector(selector);
+  }
+}
+    </script>
+
     <custom-style>
       <style is="custom-style" include="demo-pages-shared-styles">
       </style>
     </custom-style>
+    <style>
+.container {
+  background-color: #ff5252;
+	color: #fff;
+  font-family: "Muli", sans-serif;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  margin-bottom: 20px;
+  padding: 10px;
+}
+/*-------------------------------------------- separe */
+.separe {
+  background-color: #fff;
+  border-radius: calc(2em/24);
+  height: calc(2em/24);
+  width: 100%;
+}
+/*-------------------------------------------- text */
+.text-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
+  width: 100%;
+}
+.button {
+  background-color: #ff5252;
+  border-radius: 45px;
+  cursor: pointer;
+  margin: 0 10px;
+  padding: 5px 15px;
+}
+.button:hover {
+  background-color: #a53636;
+}
+.button-active {
+  background-color: #a53636;
+}
+hamburger-menu {
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 20px 0;
+  font-size: 30px;
+  --line-thickness: 5px;
+  color: orangered;
+}
+    </style>
   </head>
   <body>
     <div class="vertical-section-container centered">
       <h3>Basic hamburger-menu demo</h3>
       <demo-snippet>
         <template>
-          <hamburger-menu></hamburger-menu>
+          <hamburger-menu shape="hamburger-menu"></hamburger-menu>
         </template>
+        <div class="container">
+          <p>Control appearance with the css attribute color, --line-thickness and font-size. By changing the shape attribute the icon will change.</p>
+          <p>hamburger-menu {<br>
+              font-size: 30px;<br>
+              --line-thickness: 5px;<br>
+              color: orangered;<br>
+            }</p>
+          <div class="separe"></div>
+          <div class="text-wrapper">
+            <p id="left"  class="button">left</p>
+            <p id="right" class="button">right</p>
+            <p id="menu"  class="button button-active">menu</p>
+            <p id="close" class="button">close</p>
+            <p id="add"   class="button">add</p>
+          </div>
+        </div>
       </demo-snippet>
     </div>
   </body>
